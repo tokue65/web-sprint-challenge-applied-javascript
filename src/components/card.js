@@ -1,4 +1,33 @@
+import axios from "axios";
+
 const Card = (article) => {
+  const card = document.createElement('div');
+  const headline = document.createElement('div');
+  const author = document.createElement('div');
+  const imgContainer = document.createElement('div');
+  const img = document.createElement('img');
+  const span = document.createElement('span');
+
+  card.classList.add('card');
+  headline.classList.add('headline');
+  author.classList.add('author');
+  imgContainer.classList.add('img-container');
+
+  img.src = article.authorPhoto;
+  span.textContent = article.authorName;
+  headline.textContent = article.headline;
+
+  card.appendChild(headline);
+  card.appendChild(author);
+  author.appendChild(imgContainer);
+  imgContainer.appendChild(img);
+  author.appendChild(span);
+
+  card.addEventListener('click', () => {
+    console.log(headline.textContent)
+  })
+  return card;
+
   // TASK 5
   // ---------------------
   // Implement this function, which should return the markup you see below.
@@ -19,8 +48,14 @@ const Card = (article) => {
   //
 }
 
-const cardAppender = (selector) => {
+
   // TASK 6
+
+  const cardAppender = async (selector) => {
+    const res = await axios.get(`http://localhost:5001/api/articles`);
+    const articles = Object.values(res.data.articles).flat();
+    const container = document.querySelector(selector);
+    articles.forEach(article => container.appendChild(Card(article)))
   // ---------------------
   // Implement this function that takes a css selector as its only argument.
   // It should obtain articles from this endpoint: `http://localhost:5001/api/articles` (test it with console.log!!).
